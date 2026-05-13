@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import userModel from "../models/userModel.js";
 import { transporter } from "../config/nodeMailer.js";
+
 import { EMAIL_VERIFY_TEMPLATE,PASSWORD_RESET_TEMPLATE } from "../config/emailTemplates.js";
 
 export const register = async (req, res) => {
@@ -17,9 +18,10 @@ export const register = async (req, res) => {
       });
     }
 
-    const existingUser = await userModel.findOne({ email });
+    const existingUserEmail = await userModel.findOne({ email });
+    const existingUserName = await userModel.findOne({ name });
 
-    if (existingUser) {
+    if (existingUserEmail || existingUserName) {
       return res.json({
         success: false,
         message: "User Already Exists",
@@ -27,7 +29,13 @@ export const register = async (req, res) => {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
-    const user = new userModel({ name, email, password: hashPassword });
+
+    const user = new userModel({
+      name,
+      email,
+      password: hashPassword,
+    });
+
     await user.save();
 
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
@@ -41,15 +49,22 @@ export const register = async (req, res) => {
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    // send welcome  email
-    const mailOption = {
-      from: process.env.SENDER_EMAIL,
-      to: email,
-      subject: "Welcome to Our Website",
-      text: `Welcome to Our Website Your Account Has been Creates with using this email ${email}`,
-    };
+
+    // send welcome email to user
+      const mailOption = {  
+        from: process.env.SENDER_EMAIL,
+        to: user.email,
+        subject: "Welcome to Our Platform",
+        text: `Hello ${user.name},\n\nWelcome to our platform! Your account has been created successfully. using this email: ${user.email}\n\nBest Regards,\nThe Team`
+      };
+
     await transporter.sendMail(mailOption);
-    res.json({ success: true, message: "User Registered Successfully" });
+
+    return res.json({
+      success: true,
+      message: "User Registered Successfully",
+      user
+    });
   } catch (error) {
     return res.json({
       success: false,
@@ -58,8 +73,7 @@ export const register = async (req, res) => {
   }
 };
 
-
-// login function 
+// // login function
 export const login = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -97,7 +111,7 @@ export const login = async (req, res) => {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-      maxAge: 7 * 24 * 60 * 60 * 1000,
+      maxAge: 60 * 60 * 1000,
     });
 
     return res.json({ success: true, message: "Login Successful" });
@@ -154,14 +168,14 @@ export const sendVerifyOtp = async (req, res) => {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Account Verification OTP",
-      // text: `Your OTP is ${otp}. Verify your account using this OTP.`,
-      html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{enail}}", user.email )
+      text: `Your OTP is ${otp}. Verify your account using this OTP.`,
+      // html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email )
     };
 
     await transporter.sendMail(mailOption);
     res.json({ success: true, message: "Verification OTP sent to email" });
   } catch (error) {
-   
+
     res.json({ success: false, message: error.message });
   }
 };
@@ -212,7 +226,7 @@ export const isAuthenticated = async (req, res) => {
   }
 };
 
-// password reset
+// // password reset
 
 export const sendResetOtp = async (req, res) => {
   const { email } = req.body;
@@ -244,9 +258,9 @@ export const sendResetOtp = async (req, res) => {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Password Reset OTP",
-      // text: `Your OTP for resetting your password is ${otp}
-      //   Use this OTP to proceed with resetting your password.`,
-      html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{enail}}", user.email )
+      text: `Your OTP for resetting your password is ${otp}
+        Use this OTP to proceed with resetting your password.`,
+      // html:EMAIL_RESET_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email )
     };
     await transporter.sendMail(mailOption);
 
@@ -259,13 +273,11 @@ export const sendResetOtp = async (req, res) => {
   }
 };
 
-
-// reset user password 
+// // reset user password
 export const resetPassword  = async (req, res) => {
 
   const {email, otp, newPassword} = req.body;
   console.log("Request Body:", req.body);
-
 
   if(!email || !otp || !newPassword){
     return res.json({
@@ -308,7 +320,6 @@ export const resetPassword  = async (req, res) => {
        massage : "Password has been reset successfully"
     })
 
-
   } catch (error) {
     return res.json({
       success: false,
@@ -316,3 +327,14 @@ export const resetPassword  = async (req, res) => {
     })
   }
 }
+
+
+
+
+
+
+
+
+
+
+
