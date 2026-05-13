@@ -4,6 +4,7 @@ import cookieParser from "cookie-parser";
 import dotenv from "dotenv";
 import { connectDB } from "./config/mongoDB.js";
 import { authRouters } from "./routers/authRoutes.js";
+import { userRouter } from "./routers/usersRoutes.js";
 // import { userRouter } from "./routers/usersRoutes.js";
 
 dotenv.config();
@@ -22,7 +23,7 @@ connectDB();
  
 app.get("/", (req, res) => res.send("API Is Working!!"));
 app.use("/api/auth", authRouters)
-// app.use("/api/user", userRouter)
+app.use("/api/user", userRouter)
 
 app.listen(port, () => {
   console.log(`Server is running on PORT http://localhost:${port}`);
