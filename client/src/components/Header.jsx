@@ -1,10 +1,10 @@
-import React, { useContext } from "react";
+// import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { appContent } from "../contex/AppContext";
+// import { appContent } from "../contex/AppContext";
 
 const Header = () => {
-  const { userData } = useContext(appContent);
+  // const { userData } = useContext(appContent);
   const navigate = useNavigate();
 
   return (
@@ -17,7 +17,8 @@ const Header = () => {
 
       <div className="flex items-center justify-center mt-6">
         <h2 className="text-center text-4xl">
-          Hey {userData ? userData.user : "Developer"}!
+          hey
+          {/* Hey {userData ? userData.user : "Developer"}! */}
 
         </h2>
         <img className="w-[60px] ms-2" src={assets.hand_wave} alt="Wave" />
