@@ -28,6 +28,8 @@ export const register = async (req, res) => {
       });
     }
 
+    
+
     const hashPassword = await bcrypt.hash(password, 10);
 
     const user = new userModel({
@@ -168,8 +170,8 @@ export const sendVerifyOtp = async (req, res) => {
       from: process.env.SENDER_EMAIL,
       to: user.email,
       subject: "Account Verification OTP",
-      text: `Your OTP is ${otp}. Verify your account using this OTP.`,
-      // html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email )
+      // text: `Your OTP is ${otp}. Verify your account using this OTP.`,
+      html:EMAIL_VERIFY_TEMPLATE.replace("{{otp}}", otp).replace("{{email}}", user.email )
     };
 
     await transporter.sendMail(mailOption);
@@ -213,7 +215,7 @@ export const verifyEmail = async (req, res) => {
 
     return res.json({ success: true, message: "Email Verified Successfully" });
   } catch (error) {
-    console.error("Error in verifyEmail:", error);
+    // console.error("Error in verifyEmail:", error);
     return res.json({ success: false, message: error.message });
   }
 };
@@ -277,7 +279,7 @@ export const sendResetOtp = async (req, res) => {
 export const resetPassword  = async (req, res) => {
 
   const {email, otp, newPassword} = req.body;
-  console.log("Request Body:", req.body);
+
 
   if(!email || !otp || !newPassword){
     return res.json({

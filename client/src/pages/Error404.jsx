@@ -4,7 +4,7 @@ const Error404 = () => {
   return (
     <div className='h-screen w-screen bg-[url("./assets/bg_img.png")] bg-cover bg-center flex items-center justify-center'>
       <div className="text-center max-w-xl">
-        {/* 404 Number */}
+       
         <h1 className="text-8xl md:text-9xl font-extrabold bg-gradient-to-r from-red-400 to-red-900 text-transparent bg-clip-text drop-shadow-lg">
           404
         </h1>
