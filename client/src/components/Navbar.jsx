@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaArrowRight } from "react-icons/fa";
-import { appContent } from "../contex/AppContext";
+import { AppContent } from "../contex/AppContext";
 import { toast } from "react-toastify";
 import axios from "axios";
 
@@ -9,7 +9,7 @@ const Navbar = () => {
   const navigate = useNavigate();
 
   const { userData, backendUrl, setIsLoggedIn, setUserData } =
-    useContext(appContent);
+    useContext(AppContent);
 
   const sendVerificationOtp = async () => {
     try {

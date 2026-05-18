@@ -1,11 +1,11 @@
 // import React, { useContext } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
-import { appContent } from "../contex/AppContext";
+import { AppContent } from "../contex/AppContext";
 import { useContext } from "react";
 
 const Header = () => {
-  const { userData } = useContext(appContent);
+  const { userData } = useContext(AppContent);
   const navigate = useNavigate();
 
   return (
