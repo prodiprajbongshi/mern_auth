@@ -18,6 +18,7 @@ connectDB();
 
 
 // Middleware
+app.set("trust proxy", 1);
 app.use(express.json());
 
 app.use(cookieParser());
@@ -26,6 +27,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mern-auth-azvl.vercel.app",
+  "https://mern-auth-one-chi.vercel.app",
 ];
 
 app.use(
@@ -33,7 +35,7 @@ app.use(
     origin: function (origin, callback) {
       if (!origin) return callback(null, true);
 
-      if (allowedOrigins.includes(origin)) {
+      if (allowedOrigins.includes(origin) || origin.endsWith(".vercel.app")) {
         callback(null, true);
       } else {
         callback(new Error("Not allowed by CORS"));
