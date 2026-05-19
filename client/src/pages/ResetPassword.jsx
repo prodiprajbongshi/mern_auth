@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContent } from "../contex/AppContext";
- 
+
 
 const ResetPassword = () => {
 
@@ -177,17 +177,15 @@ const ResetPassword = () => {
             </p>
 
             <div className="mb-4 flex items-center gap-3 w-full px-5 py-3 rounded-lg bg-[#333A5C]">
-
               <input
                 type="email"
                 placeholder="Email Address"
-                className="bg-transparent outline-none text-white w-full"
+                className="bg-transparent focus:bg-transparent autofill:bg-transparent outline-none text-white w-full"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 autoComplete="email"
                 required
               />
-
             </div>
 
             <button
@@ -202,7 +200,6 @@ const ResetPassword = () => {
 
         {/* OTP FORM */}
         {!isOtpSubmitted && isEmailSent && (
-
           <form
             onSubmit={onSubmitOTP}
             className="bg-slate-900/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-full max-w-md text-sm"
@@ -257,7 +254,6 @@ const ResetPassword = () => {
             className="bg-slate-900/90 backdrop-blur-sm p-8 rounded-2xl shadow-2xl w-full max-w-md text-sm"
           >
 
-            {/* Hidden Email Field for Accessibility */}
             <input
               type="email"
               value={email}

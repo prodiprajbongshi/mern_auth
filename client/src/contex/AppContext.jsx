@@ -25,15 +25,12 @@ export const AppContextProvider = ({ children }) => {
         setUserData(null);
       }
     } catch (error) {
-      // if (error.response?.status !== 401) {
-      //   // toast.error(
-      //   //   error.response?.data?.message || error.message
-      //   // );
-      // }
-
       if (error.response?.status !== 401) {
-        toast.error("An error occurred."); 
+        toast.error(
+          error.response?.data?.message || error.message
+        );
       }
+ 
 
       setIsLoggedIn(false);
       setUserData(null);

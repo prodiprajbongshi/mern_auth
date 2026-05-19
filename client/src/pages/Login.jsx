@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { AppContent } from "../contex/AppContext";
- 
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -11,7 +11,7 @@ const Login = () => {
   const { backendUrl, setIsLoggedIn, getUserData } =
     useContext(AppContent);
 
-  const [state, setState] = useState("login");
+  const [state, setState] = useState("sign up");
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
