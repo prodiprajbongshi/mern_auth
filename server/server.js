@@ -26,6 +26,7 @@ app.use(cookieParser());
 const allowedOrigins = [
   "http://localhost:5173",
   "https://mern-auth-azvl.vercel.app",
+  "https://www.mern-auth-azvl.vercel.app"
 ];
 
 app.use(
